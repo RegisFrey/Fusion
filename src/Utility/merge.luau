@@ -7,8 +7,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	Attempts to merge a variadic number of tables together.
 ]]
 
-local Package = script.Parent.Parent
-local External = require(Package.Externals.External)
+local External = require("../Externals/External")
 
 local function merge(
 	overwrite: boolean,

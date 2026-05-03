@@ -9,10 +9,9 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	Procedures for checking lifetimes and printing helpful warnings about them.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
-local External = require(Package.Externals.External)
-local nameOf = require(Package.Utility.nameOf)
+local Types = require("../Types")
+local External = require("../Externals/External")
+local nameOf = require("../Utility/nameOf")
 
 local checkLifetime = {}
 

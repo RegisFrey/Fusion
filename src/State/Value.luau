@@ -9,13 +9,12 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	https://elttob.uk/Fusion/0.3/api-reference/state/types/value/
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
+local Types = require("../Types")
 -- Graph
-local change = require(Package.Graph.change)
+local change = require("../Graph/change")
 -- Utility
-local isSimilar = require(Package.Utility.isSimilar)
-local nicknames = require(Package.Utility.nicknames)
+local isSimilar = require("../Utility/isSimilar")
+local nicknames = require("../Utility/nicknames")
 
 type Self<T, S> = Types.Value<T, S>
 

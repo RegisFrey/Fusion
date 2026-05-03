@@ -7,11 +7,10 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	Forms a dependency on a graph object.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
-local External = require(Package.Externals.External)
-local evaluate = require(Package.Graph.evaluate)
-local nameOf = require(Package.Utility.nameOf)
+local Types = require("../Types")
+local External = require("../Externals/External")
+local evaluate = require("./evaluate")
+local nameOf = require("../Utility/nameOf")
 
 local function depend<T>(
 	dependent: Types.GraphObject,

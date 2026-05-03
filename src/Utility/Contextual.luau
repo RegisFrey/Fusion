@@ -8,11 +8,10 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	the call stack.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
-local External = require(Package.Externals.External)
+local Types = require("../Types")
+local External = require("../Externals/External")
 -- Logging
-local parseError = require(Package.Logging.parseError)
+local parseError = require("../Logging/parseError")
 
 export type Self<T> = Types.Contextual<T> & {
 	_valuesNow: {[thread]: {value: T}},

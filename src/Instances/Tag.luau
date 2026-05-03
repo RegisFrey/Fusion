@@ -8,15 +8,14 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	CollectionService tags to instances
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
+local Types = require("../Types")
 -- Memory
-local checkLifetime = require(Package.Memory.checkLifetime)
+local checkLifetime = require("../Memory/checkLifetime")
 -- Graph
-local Observer = require(Package.Graph.Observer)
+local Observer = require("../Graph/Observer")
 -- State
-local castToState = require(Package.State.castToState)
-local peek = require(Package.State.peek)
+local castToState = require("../State/castToState")
+local peek = require("../State/peek")
 
 local keyCache: { [string]: Types.SpecialKey } = {}
 

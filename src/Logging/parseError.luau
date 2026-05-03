@@ -8,8 +8,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	errors, such as clean messages and stack traces.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
+local Types = require("../Types")
 
 local function parseError(
 	err: string

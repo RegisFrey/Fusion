@@ -11,8 +11,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	functions are expected to be infallible and non-blocking.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
+local Types = require("../Types")
 
 local currentProvider: Types.ExternalDebugger? = nil
 local lastUpdateStep = 0

@@ -16,20 +16,19 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	each occurrence.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
-local External = require(Package.Externals.External)
+local Types = require("../Types")
+local External = require("../Externals/External")
 -- Logging
-local parseError = require(Package.Logging.parseError)
+local parseError = require("../Logging/parseError")
 -- Memory
-local checkLifetime = require(Package.Memory.checkLifetime)
+local checkLifetime = require("../Memory/checkLifetime")
 -- Graph
-local Observer = require(Package.Graph.Observer)
+local Observer = require("../Graph/Observer")
 -- State
-local castToState = require(Package.State.castToState)
-local peek = require(Package.State.peek)
+local castToState = require("../State/castToState")
+local peek = require("../State/peek")
 -- Utility
-local xtypeof = require(Package.Utility.xtypeof)
+local xtypeof = require("../Utility/xtypeof")
 
 local function setProperty_unsafe(
 	instance: Instance,

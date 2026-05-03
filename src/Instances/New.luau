@@ -8,11 +8,10 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	event handlers and other attributes on the instance right away.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
-local External = require(Package.Externals.External)
-local defaultProps = require(Package.Instances.defaultProps)
-local applyInstanceProps = require(Package.Instances.applyInstanceProps)
+local Types = require("../Types")
+local External = require("../Externals/External")
+local defaultProps = require("./defaultProps")
+local applyInstanceProps = require("./applyInstanceProps")
 
 type Component = (Types.PropertyTable) -> Instance
 

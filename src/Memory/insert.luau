@@ -6,8 +6,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 --[[
 	Inserts clean up tasks passed in to the scope.
 ]]
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
+local Types = require("../Types")
 
 local function insert<Tasks...>(
 	scope: Types.Scope<unknown>,

@@ -10,24 +10,23 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	https://elttob.uk/Fusion/0.3/api-reference/state/types/computed/
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
-local External = require(Package.Externals.External)
+local Types = require("../Types")
+local External = require("../Externals/External")
 -- Logging
-local parseError = require(Package.Logging.parseError)
+local parseError = require("../Logging/parseError")
 -- Utility
-local isSimilar = require(Package.Utility.isSimilar)
+local isSimilar = require("../Utility/isSimilar")
 -- Graph
-local depend = require(Package.Graph.depend)
+local depend = require("../Graph/depend")
 -- State
-local castToState = require(Package.State.castToState)
-local peek = require(Package.State.peek)
+local castToState = require("./castToState")
+local peek = require("./peek")
 -- Memory
-local doCleanup = require(Package.Memory.doCleanup)
-local deriveScope = require(Package.Memory.deriveScope)
-local checkLifetime = require(Package.Memory.checkLifetime)
+local doCleanup = require("../Memory/doCleanup")
+local deriveScope = require("../Memory/deriveScope")
+local checkLifetime = require("../Memory/checkLifetime")
 -- Utility
-local nicknames = require(Package.Utility.nicknames)
+local nicknames = require("../Utility/nicknames")
 
 type Self<T, S> = Types.Computed<T> & {
 	_innerScope: Types.Scope<S>?,

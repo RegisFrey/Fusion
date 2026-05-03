@@ -7,9 +7,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	Returns the most specific custom name for the given object.
 ]]
 
-local Package = script.Parent.Parent
 -- Utility
-local nicknames = require(Package.Utility.nicknames)
+local nicknames = require("./nicknames")
 
 local function nameOf(
 	x: unknown,

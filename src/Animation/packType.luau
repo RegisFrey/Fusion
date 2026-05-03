@@ -8,9 +8,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	If the type is not animatable, nil will be returned.
 ]]
 
-local Package = script.Parent.Parent
-local Types = require(Package.Types)
-local Oklab = require(Package.Colour.Oklab)
+local Types = require("../Types")
+local Oklab = require("../Colour/Oklab")
 
 local function packType(
 	numbers: {number},
