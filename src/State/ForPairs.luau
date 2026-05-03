@@ -15,7 +15,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 
 local Package = script.Parent.Parent
 local Types = require(Package.Types)
-local External = require(Package.External)
+local External = require(Package.Externals.External)
 -- State
 local For = require(Package.State.For)
 local Value = require(Package.State.Value)

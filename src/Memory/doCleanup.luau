@@ -15,8 +15,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 ]]
 local Package = script.Parent.Parent
 local Types = require(Package.Types)
-local External = require(Package.External)
-local ExternalDebug = require(Package.ExternalDebug)
+local External = require(Package.Externals.External)
+local ExternalDebug = require(Package.Externals.ExternalDebug)
 
 local alreadyDestroying: {[Types.Task]: true} = {}
 

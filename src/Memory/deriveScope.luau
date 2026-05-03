@@ -12,7 +12,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 ]]
 local Package = script.Parent.Parent
 local Types = require(Package.Types)
-local ExternalDebug = require(Package.ExternalDebug)
+local ExternalDebug = require(Package.Externals.ExternalDebug)
 local deriveScopeImpl = require(Package.Memory.deriveScopeImpl)
 
 local function deriveScope(...)

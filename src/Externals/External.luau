@@ -8,7 +8,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	allowing for flexible integration with schedulers and test mocks.
 ]]
 
-local Package = script.Parent
+local Package = script.Parent.Parent
 local formatError = require(Package.Logging.formatError)
 local Types = require(Package.Types)
 

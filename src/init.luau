@@ -7,7 +7,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 ]]
 
 local Types = require(script.Types)
-local External = require(script.External)
+local External = require(script.Externals.External)
 
 type Fusion = Types.Fusion
 
@@ -34,7 +34,7 @@ export type Version = Types.Version
 -- Down the line, this will be conditional based on whether Fusion is being
 -- compiled for Roblox.
 do
-	local RobloxExternal = require(script.RobloxExternal)
+	local RobloxExternal = require(script.Externals.Roblox.RobloxExternal)
 	External.setExternalProvider(RobloxExternal)
 end
 
