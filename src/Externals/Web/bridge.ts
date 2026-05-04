@@ -26,6 +26,7 @@ export function prepareBridge () {
             if (key == 'style') key = 'cssText'
             if (key == 'class') key = 'className'
             if (key == 'text') key = 'textContent'
+            if (key == 'name') key = 'id' // but id should take priority
             // @ts-ignore
             el[key] = value
         },
