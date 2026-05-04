@@ -160,7 +160,11 @@ function RobloxExternal.connectEvent(instance: Instance, eventName: string, call
 end
 
 function RobloxExternal.observeChanges(instance: Instance, propertyName: string, callback: () -> ()): () -> ()
-	local connection = instance:GetPropertyChangedSignal(propertyName):Connect(callback)
+	local ok, signal = pcall(instance.GetPropertyChangedSignal, instance, propertyName)
+	if not ok then
+		External.logError("cannotConnectChange", nil, instance.ClassName, propertyName)
+	end
+	local connection = signal:Connect(callback)
 	return function()
 		connection:Disconnect()
 	end
