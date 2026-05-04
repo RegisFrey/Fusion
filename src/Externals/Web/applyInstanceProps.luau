@@ -1,6 +1,12 @@
 local web = require("@web")
 -- bit odd to be importing External inside an external
 local External = require("../External")
+local WebExternal = require("./WebExternal")
+local Types = require("../../Types")
+local External = require("../External")
+local Observer = require("@fusion/Graph/Observer")
+local peek = require("@fusion/State/peek")
+local castToState = require("@fusion/State/castToState")
 
 -- our apply property is different
 local function applyProperty(instance, key, value)
@@ -43,6 +49,4 @@ local function applyInstanceProps(
 	end
 end
 
-return {
-	applyInstanceProps = applyInstanceProps,
-}
+return applyInstanceProps

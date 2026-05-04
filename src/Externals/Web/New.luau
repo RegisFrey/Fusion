@@ -1,51 +1,13 @@
 local WebExternal = require("./WebExternal")
-local Types = require("@self/../../Types")
-local External = require("@self/../External")
+local Types = require("../../Types")
+local External = require("../External")
 local Observer = require("@fusion/Graph/Observer")
 local peek = require("@fusion/State/peek")
 local castToState = require("@fusion/State/castToState")
-
+local applyInstanceProps = require("./applyInstanceProps")
 -- our web based new is different:
 -- No `Instance` type dependencies
 -- No redundant instances (we are creating them on the HTML side)
-
--- our apply property is different
-local function applyProperty(instance, key, value)
-	-- Handling parenting independently since HTML parentElement is read-only
-	if key == "Parent" or key == "parent" then
-		WebExternal.setParent(instance, value)
-	else
-		WebExternal.setProperty(instance, key, value)
-	end
-end
-
--- The Roblox version of this handles more special keys
--- so we definitely will have some issues there
--- but the Roblox one is also very Instance / Instance API specific
-local function applyInstanceProps(
-	scope: Types.Scope<unknown>,
-	props: Types.PropertyTable,
-	applyTo: any -- HTMLElement?
-)
-	for key, value in pairs(props) do
-		if type(key) == "table" and key.type == "SpecialKey" then
-			key:apply(scope, value, applyTo)
-		else
-			local state = castToState(value)
-			if state then
-				table.insert(
-					scope,
-					Observer(value):onChange(function()
-						applyProperty(applyTo, key, peek(value))
-					end)
-				)
-				applyProperty(applyTo, key, peek(value))
-			else
-				applyProperty(applyTo, key, value)
-			end
-		end
-	end
-end
 
 -- I've refactored the main New to match this one
 -- e.g. moved env specific parts to createInstance
