@@ -41,7 +41,7 @@ startApp().catch(console.error);
 and a sample app.luau might be:
 
 ```luau
-local web = require("@self/bridge")
+local web = require("@web-bridge")
 local Fusion = require("@fusion")
 local scope = Fusion.scoped(Fusion)
 

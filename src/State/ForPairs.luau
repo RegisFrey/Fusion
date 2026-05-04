@@ -16,7 +16,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 local Types = require("../Types")
 local External = require("../Externals/External")
 -- State
-local For = require("./For")
+local For = require("./For/For")
 local Value = require("./Value")
 local Computed = require("./Computed")
 local ForTypes = require("./For/ForTypes")
@@ -38,8 +38,8 @@ local SUB_OBJECT_META = {
 		useOutputPair = function(self, use)
 			local pair = use(self._outputPairState)
 			return pair.key, pair.value
-		end
-	}
+		end,
+	},
 }
 
 local function SubObject<KI, KO, VI, VO, S>(
@@ -55,19 +55,19 @@ local function SubObject<KI, KO, VI, VO, S>(
 	self._inputKeyState = Value(scope, initialKey)
 	self._inputValueState = Value(scope, initialValue)
 	self._processor = processor
-	self._outputPairState = Computed(scope, function(use, scope): {key: KO?, value: VO?}
+	self._outputPairState = Computed(scope, function(use, scope): { key: KO?, value: VO? }
 		local inputKey = use(self._inputKeyState)
 		local inputValue = use(self._inputValueState)
 		local ok, outputKey, outputValue = xpcall(self._processor, parseError, use, scope, inputKey, inputValue)
 		if ok then
-			return {key = outputKey, value = outputValue}
+			return { key = outputKey, value = outputValue }
 		else
 			local error: Types.Error = outputKey :: any
 			error.context = `while processing key {tostring(inputKey)} and value {tostring(inputValue)}`
 			External.logErrorNonFatal("callbackError", error)
 			doCleanup(scope)
 			table.clear(scope)
-			return {key = nil, value = nil}
+			return { key = nil, value = nil }
 		end
 	end)
 	return setmetatable(self, SUB_OBJECT_META) :: any
@@ -75,16 +75,12 @@ end
 
 local function ForPairs<KI, KO, VI, VO, S>(
 	scope: Types.Scope<S>,
-	inputTable: Types.UsedAs<{[KI]: VI}>,
+	inputTable: Types.UsedAs<{ [KI]: VI }>,
 	processor: (Types.Use, Types.Scope<S>, KI, VI) -> (KO, VO)
 ): Types.For<KO, VO>
-	return For(
-		scope,
-		inputTable,
-		function(scope, initialKey, initialValue)
-			return SubObject(scope, initialKey, initialValue, processor)
-		end
-	)
+	return For(scope, inputTable, function(scope, initialKey, initialValue)
+		return SubObject(scope, initialKey, initialValue, processor)
+	end)
 end
 
 return ForPairs :: Types.ForPairsConstructor

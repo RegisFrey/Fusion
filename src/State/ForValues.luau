@@ -16,7 +16,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 local Types = require("../Types")
 local External = require("../Externals/External")
 -- State
-local For = require("./For")
+local For = require("./For/For")
 local Value = require("./Value")
 local Computed = require("./Computed")
 local ForTypes = require("./For/ForTypes")
@@ -37,8 +37,8 @@ local SUB_OBJECT_META = {
 		end,
 		useOutputPair = function(self, use)
 			return self.inputKey, use(self._outputValueState)
-		end
-	}
+		end,
+	},
 }
 
 local function SubObject<K, VI, VO, S>(
@@ -72,16 +72,12 @@ end
 
 local function ForValues<K, VI, VO, S>(
 	scope: Types.Scope<S>,
-	inputTable: Types.UsedAs<{[K]: VI}>,
+	inputTable: Types.UsedAs<{ [K]: VI }>,
 	processor: (Types.Use, Types.Scope<S>, VI) -> VO
 ): Types.For<K, VO>
-	return For(
-		scope,
-		inputTable,
-		function(scope, initialKey, initialValue)
-			return SubObject(scope, initialKey, initialValue, processor)
-		end
-	)
+	return For(scope, inputTable, function(scope, initialKey, initialValue)
+		return SubObject(scope, initialKey, initialValue, processor)
+	end)
 end
 
 return ForValues :: Types.ForValuesConstructor

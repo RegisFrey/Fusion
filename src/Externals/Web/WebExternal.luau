@@ -1,5 +1,5 @@
-local External = require("@self/../External")
-local web = require("@self/bridge")
+local External = require("../External")
+local web = require("./bridge")
 
 local WebExternal = {}
 

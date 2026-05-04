@@ -7,17 +7,17 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	The generic implementation for all `For` objects.
 ]]
 
-local Types = require("@self/../../Types")
+local Types = require("../../Types")
 -- Graph
-local depend = require("@self/../../Graph/depend")
+local depend = require("../../Graph/depend")
 -- State
-local peek = require("@self/../../State/peek")
-local castToState = require("@self/../../State/castToState")
-local ForTypes = require("@self/../../State/For/ForTypes")
+local peek = require("../peek")
+local castToState = require("../castToState")
+local ForTypes = require("./ForTypes")
 -- Utility
-local nicknames = require("@self/../../Utility/nicknames")
+local nicknames = require("../../Utility/nicknames")
 
-local Disassembly = require("@self/../../State/For/Disassembly")
+local Disassembly = require("./Disassembly")
 
 type Self<S, KI, KO, VI, VO> = Types.For<KO, VO> & {
 	_disassembly: ForTypes.Disassembly<S, KI, KO, VI, VO>,

@@ -9,9 +9,9 @@
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
-local Types = require("@self/../../Types")
-local External = require("@self/../External")
-local defaultProps = require("@self/defaultProps")
+local Types = require("../../Types")
+local External = require("../External")
+local defaultProps = require("./defaultProps")
 
 local RobloxExternal = {}
 
@@ -20,11 +20,11 @@ RobloxExternal.policies = {
 }
 
 RobloxExternal.specialKeys = {
-	Attribute = require("@self/Attribute"),
-	AttributeChange = require("@self/AttributeChange"),
-	AttributeOut = require("@self/AttributeOut"),
-	Tag = require("@self/Tag"),
-	Hydrate = require("@self/Hydrate"),
+	Attribute = require("./Attribute"),
+	AttributeChange = require("./AttributeChange"),
+	AttributeOut = require("./AttributeOut"),
+	Tag = require("./Tag"),
+	Hydrate = require("./Hydrate"),
 }
 
 --[[

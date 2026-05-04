@@ -4,7 +4,7 @@
 local task = nil -- Disable usage of Roblox's task scheduler
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Fusion = require(ReplicatedStorage.Fusion)
+local Fusion = require(ReplicatedStorage.Fusion.Fusion)
 local scoped, peek = Fusion.scoped, Fusion.peek
 
 return function()
@@ -12,7 +12,7 @@ return function()
 
 	describe("regression tests", function()
 		local it = getfenv().it
-	
+
 		it("re-entrant Observers do not block eager updates", function()
 			local expect = getfenv().expect
 

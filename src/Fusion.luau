@@ -6,8 +6,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	The entry point for the Fusion library.
 ]]
 
-local Types = require("@self/Types")
-local External = require("@self/Externals/External")
+local Types = require("./Types")
+local External = require("./Externals/External")
 
 type Fusion = Types.Fusion
 
@@ -33,10 +33,10 @@ export type Version = Types.Version
 export type TweenInfo = Types.TweenInfo
 
 if game then
-	local RobloxExternal = require("@self/Externals/Roblox")
+	local RobloxExternal = require("./Externals/Roblox/RobloxExternal")
 	External.setExternalProvider(RobloxExternal)
 else
-	local WebExternal = require("@self/Externals/Web")
+	local WebExternal = require("./Externals/Web/WebExternal")
 	External.setExternalProvider(WebExternal)
 	-- For now web is our only other target
 	-- so we can condition on game.
@@ -48,41 +48,41 @@ end
 local FusionTable = {
 	-- General
 	version = { major = 0, minor = 4, isRelease = false },
-	Contextual = require("@self/Utility/Contextual"),
-	Safe = require("@self/Utility/Safe"),
+	Contextual = require("./Utility/Contextual"),
+	Safe = require("./Utility/Safe"),
 
 	-- Memory
-	deriveScope = require("@self/Memory/deriveScope"),
-	doCleanup = require("@self/Memory/doCleanup"),
-	innerScope = require("@self/Memory/innerScope"),
-	insert = require("@self/Memory/insert"),
-	scoped = require("@self/Memory/scoped"),
+	deriveScope = require("./Memory/deriveScope"),
+	doCleanup = require("./Memory/doCleanup"),
+	innerScope = require("./Memory/innerScope"),
+	insert = require("./Memory/insert"),
+	scoped = require("./Memory/scoped"),
 
 	-- Graph
-	Observer = require("@self/Graph/Observer"),
+	Observer = require("./Graph/Observer"),
 
 	-- State
-	Computed = require("@self/State/Computed"),
-	ForKeys = require("@self/State/ForKeys") :: Types.ForKeysConstructor,
-	ForPairs = require("@self/State/ForPairs") :: Types.ForPairsConstructor,
-	ForValues = require("@self/State/ForValues") :: Types.ForValuesConstructor,
-	peek = require("@self/State/peek"),
-	Value = require("@self/State/Value"),
+	Computed = require("./State/Computed"),
+	ForKeys = require("./State/ForKeys") :: Types.ForKeysConstructor,
+	ForPairs = require("./State/ForPairs") :: Types.ForPairsConstructor,
+	ForValues = require("./State/ForValues") :: Types.ForValuesConstructor,
+	peek = require("./State/peek"),
+	Value = require("./State/Value"),
 
 	-- Base API
-	New = require("@self/Instances/New"),
-	Child = require("@self/Instances/Child"),
+	New = require("./Instances/New"),
+	Child = require("./Instances/Child"),
 
 	-- Animation
-	Tween = require("@self/Animation/Tween"),
-	Spring = require("@self/Animation/Spring"),
-	TweenInfo = require("@self/Animation/TweenService").TweenInfo,
-	EasingStyle = require("@self/Animation/TweenService").EasingStyle,
-	EasingDirection = require("@self/Animation/TweenService").EasingDirection,
+	Tween = require("./Animation/Tween"),
+	Spring = require("./Animation/Spring"),
+	TweenInfo = require("./Animation/TweenService").TweenInfo,
+	EasingStyle = require("./Animation/TweenService").EasingStyle,
+	EasingDirection = require("./Animation/TweenService").EasingDirection,
 }
 
 -- Mixin platform-specific special keys and behaviors
-local coreSpecialKeys = require("@self/Instances")
+local coreSpecialKeys = require("./Instances/defaultSpecialKeys")
 for name, value in pairs(coreSpecialKeys) do
 	FusionTable[name] = value
 end

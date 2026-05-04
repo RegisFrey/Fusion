@@ -18,7 +18,7 @@ local External = require("../Externals/External")
 -- Memory
 local doCleanup = require("../Memory/doCleanup")
 -- State
-local For = require("./For")
+local For = require("./For/For")
 local Value = require("./Value")
 local Computed = require("./Computed")
 local ForTypes = require("./For/ForTypes")
@@ -37,8 +37,8 @@ local SUB_OBJECT_META = {
 		end,
 		useOutputPair = function(self, use)
 			return use(self._outputKeyState), self.inputValue
-		end
-	}
+		end,
+	},
 }
 
 local function SubObject<KI, KO, V, S>(
@@ -72,16 +72,12 @@ end
 
 local function ForKeys<KI, KO, V, S>(
 	scope: Types.Scope<S>,
-	inputTable: Types.UsedAs<{[KI]: V}>,
+	inputTable: Types.UsedAs<{ [KI]: V }>,
 	processor: (Types.Use, Types.Scope<S>, KI) -> KO
 ): Types.For<KO, V>
-	return For(
-		scope, 
-		inputTable, 
-		function(scope, initialKey, initialValue)
-			return SubObject(scope, initialKey, initialValue, processor)
-		end
-	)
+	return For(scope, inputTable, function(scope, initialKey, initialValue)
+		return SubObject(scope, initialKey, initialValue, processor)
+	end)
 end
 
 return ForKeys :: Types.ForKeysConstructor

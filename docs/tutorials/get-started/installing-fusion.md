@@ -31,7 +31,7 @@ Now, you can create a script for testing:
 
 ```Lua linenums="1"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Fusion = require(ReplicatedStorage.Fusion)
+local Fusion = require(ReplicatedStorage.Fusion.Fusion)
 ```
 
 - Press 'Play' - if there are no errors, everything was set up correctly!
@@ -57,7 +57,7 @@ of the following ways:
 
 ```Lua
 -- Rojo
-local Fusion = require(ReplicatedStorage.Fusion)
+local Fusion = require(ReplicatedStorage.Fusion.Fusion)
 
 -- darklua
 local Fusion = require("../shared/Fusion")
