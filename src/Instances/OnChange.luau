@@ -8,8 +8,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	listeners to an instance.
 ]]
 
-local Types = require("../../Types")
-local External = require("../External")
+local Types = require("../Types")
+local External = require("../Externals/External")
 
 local keyCache: {[string]: Types.SpecialKey} = {}
 
@@ -26,17 +26,14 @@ local function OnChange(
 				self: Types.SpecialKey,
 				scope: Types.Scope<unknown>,
 				callback: unknown,
-				applyTo: Instance
+				applyTo: any
 			)
-				local ok, event = pcall(applyTo.GetPropertyChangedSignal, applyTo, propertyName)
-				if not ok then
-					External.logError("cannotConnectChange", nil, applyTo.ClassName, propertyName)
-				elseif typeof(callback) ~= "function" then
+				if typeof(callback) ~= "function" then
 					External.logError("invalidChangeHandler", nil, propertyName)
 				else
 					local callback = callback :: (...unknown) -> (...unknown)
-					table.insert(scope, event:Connect(function()
-						callback((applyTo :: any)[propertyName])
+					table.insert(scope, External.observeChanges(applyTo, propertyName, function()
+						callback(External.getProperty(applyTo, propertyName))
 					end))
 				end
 			end

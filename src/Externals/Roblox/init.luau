@@ -23,10 +23,6 @@ RobloxExternal.specialKeys = {
 	Attribute = require("./Attribute"),
 	AttributeChange = require("./AttributeChange"),
 	AttributeOut = require("./AttributeOut"),
-	Children = require("./Children"),
-	OnChange = require("./OnChange"),
-	OnEvent = require("./OnEvent"),
-	Out = require("./Out"),
 	Tag = require("./Tag"),
 	Hydrate = require("./Hydrate"),
 }
@@ -115,6 +111,70 @@ function RobloxExternal.createInstance(
 		end
 	end
 	return instance
+end
+
+local function setProperty_unsafe(
+	instance: Instance,
+	property: string,
+	value: unknown
+)
+	(instance :: any)[property] = value
+end
+
+local function testPropertyAssignable(
+	instance: Instance,
+	property: string
+)
+	(instance :: any)[property] = (instance :: any)[property]
+end
+
+function RobloxExternal.applyProperty(instance: Instance, key: string, value: any)
+	local success, err = pcall(setProperty_unsafe, instance, key, value)
+
+	if not success then
+		if not pcall(testPropertyAssignable, instance, key) then
+			External.logErrorNonFatal("cannotAssignProperty", nil, instance.ClassName, key)
+		else
+			-- property is assignable, but this specific assignment failed
+			-- this typically implies the wrong type was received
+			local givenType = typeof(value)
+			local expectedType = typeof((instance :: any)[key])
+
+			if givenType == expectedType then
+				-- We can't use parseError here easily without importing it, 
+				-- but External.logErrorNonFatal expects a string.
+				External.logErrorNonFatal("propertySetError", nil, tostring(err))
+			else
+				External.logErrorNonFatal("invalidPropertyType", nil, instance.ClassName, key, expectedType, givenType)
+			end
+		end
+	end
+end
+
+function RobloxExternal.getProperty(instance: Instance, key: string): any
+	return (instance :: any)[key]
+end
+
+function RobloxExternal.setParent(instance: Instance, parent: Instance?)
+	instance.Parent = parent
+end
+
+function RobloxExternal.connectEvent(instance: Instance, eventName: string, callback: (...any) -> ()): () -> ()
+	local connection = (instance :: any)[eventName]:Connect(callback)
+	return function()
+		connection:Disconnect()
+	end
+end
+
+function RobloxExternal.observeChanges(instance: Instance, propertyName: string, callback: () -> ()): () -> ()
+	local connection = instance:GetPropertyChangedSignal(propertyName):Connect(callback)
+	return function()
+		connection:Disconnect()
+	end
+end
+
+function RobloxExternal.isInstance(value: any): boolean
+	return typeof(value) == "Instance"
 end
 
 return RobloxExternal

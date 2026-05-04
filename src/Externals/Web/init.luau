@@ -11,27 +11,49 @@ WebExternal.policies = {
 	allowWebLinks = true,
 }
 
-WebExternal.specialKeys = {
-	New = require("./New"),
-	Children = require("./Children"),
-	OnEvent = require("./OnEvent"),
-}
+WebExternal.specialKeys = {}
 
 function WebExternal.createInstance(scope, className, props)
 	local native = web.createElement(className)
 
+	-- TODO: Q: Why wrapping this in a table vs returning directly?
+	-- I know we are using `_native` to detect it's an HTML element
+	-- but can't there be a better way?
+	-- e.g. what is actual shape of the web.createElement return
+	-- and can't we use something about that shape to detect
+	-- then we can cut this indirection / distracting noise.
 	return {
 		_native = native,
 	}
 end
 
-function WebExternal.setProperty(instance, key, value)
-	web.setProperty(instance._native, key, value)
+function WebExternal.applyProperty(instance, key, value)
+	if key == "Parent" or key == "parent" then
+		WebExternal.setParent(instance, value)
+	else
+		web.setProperty(instance._native, key, value)
+	end
+end
+
+function WebExternal.getProperty(instance, key)
+	return web.getProperty(instance._native, key)
 end
 
 function WebExternal.setParent(instance, parent)
 	local parentNative = if type(parent) == "table" then parent._native else parent
 	web.setParent(instance._native, parentNative)
+end
+
+function WebExternal.connectEvent(instance, eventName, callback)
+	return web.addEventListener(instance._native, eventName, callback)
+end
+
+function WebExternal.observeChanges(instance, propertyName, callback)
+	return web.observeProperty(instance._native, propertyName, callback)
+end
+
+function WebExternal.isInstance(value)
+	return type(value) == "table" and value._native ~= nil
 end
 
 function WebExternal.doTaskImmediate(resume)

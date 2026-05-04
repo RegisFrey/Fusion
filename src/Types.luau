@@ -308,6 +308,38 @@ export type ExternalProvider = {
 		props: PropertyTable
 	) -> any,
 
+	applyProperty: (
+		instance: any,
+		key: string,
+		value: any
+	) -> (),
+
+	getProperty: (
+		instance: any,
+		key: string
+	) -> any,
+
+	setParent: (
+		instance: any,
+		parent: any
+	) -> (),
+
+	connectEvent: (
+		instance: any,
+		eventName: string,
+		callback: (...any) -> ()
+	) -> (() -> ()),
+
+	observeChanges: (
+		instance: any,
+		propertyName: string,
+		callback: () -> ()
+	) -> (() -> ()),
+
+	isInstance: (
+		value: any
+	) -> boolean,
+
 	specialKeys: {[string]: any}
 }
 

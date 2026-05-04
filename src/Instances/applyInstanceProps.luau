@@ -19,7 +19,6 @@ local task = nil -- Disable usage of Roblox's task scheduler
 local Types = require("../Types")
 local External = require("../Externals/External")
 -- Logging
-local parseError = require("../Logging/parseError")
 -- Memory
 local checkLifetime = require("../Memory/checkLifetime")
 -- Graph
@@ -30,88 +29,55 @@ local peek = require("../State/peek")
 -- Utility
 local xtypeof = require("../Utility/xtypeof")
 
-local function setProperty_unsafe(
-	instance: Instance,
-	property: string,
-	value: unknown
-)
-	(instance :: any)[property] = value
+local function applyProperty(instance: any, property: string, value: unknown)
+	External.applyProperty(instance, property, value)
 end
 
-local function testPropertyAssignable(
-	instance: Instance,
-	property: string
-)
-	(instance :: any)[property] = (instance :: any)[property]
-end
-
-local function setProperty(
-	instance: Instance,
-	property: string,
-	value: unknown
-)
-	local success, err = xpcall(setProperty_unsafe :: any, parseError, instance, property, value)
-
-	if not success then
-		if not pcall(testPropertyAssignable, instance, property) then
-			External.logErrorNonFatal("cannotAssignProperty", nil, instance.ClassName, property)
-		else
-			-- property is assignable, but this specific assignment failed
-			-- this typically implies the wrong type was received
-			local givenType = typeof(value)
-			local expectedType = typeof((instance :: any)[property])
-
-			if givenType == expectedType then
-				External.logErrorNonFatal("propertySetError", err)
+local function bindProperty(scope: Types.Scope<unknown>, instance: any, property: string, value: Types.UsedAs<unknown>)
+	if castToState(value) then
+		local value = value :: Types.StateObject<unknown>
+		checkLifetime.bOutlivesA(
+			scope,
+			instance,
+			value.scope,
+			value.oldestTask,
+			checkLifetime.formatters.boundProperty,
+			property
+		)
+		-- value is a state object - bind to changes
+		Observer(scope, value :: any):onBind(function()
+			if string.lower(property) == "parent" then
+				External.setParent(instance, peek(value))
 			else
-				External.logErrorNonFatal("invalidPropertyType", nil, instance.ClassName, property, expectedType, givenType)
+				applyProperty(instance, property, peek(value))
 			end
+		end)
+	else
+		-- value is a constant - assign once only
+		if string.lower(property) == "parent" then
+			External.setParent(instance, value)
+		else
+			applyProperty(instance, property, value)
 		end
 	end
 end
 
-local function bindProperty(
-	scope: Types.Scope<unknown>,
-	instance: Instance,
-	property: string,
-	value: Types.UsedAs<unknown>
-)
-	if castToState(value) then
-		local value = value :: Types.StateObject<unknown>
-		checkLifetime.bOutlivesA(
-			scope, instance,
-			value.scope, value.oldestTask,
-			checkLifetime.formatters.boundProperty, property
-		)
-		-- value is a state object - bind to changes
-		Observer(scope, value :: any):onBind(function()
-			setProperty(instance, property, peek(value))
-		end)
-	else
-		-- value is a constant - assign once only
-		setProperty(instance, property, value)
-	end
-end
-
-local function applyInstanceProps(
-	scope: Types.Scope<unknown>,
-	props: Types.PropertyTable,
-	applyTo: Instance
-)
+local function applyInstanceProps(scope: Types.Scope<unknown>, props: Types.PropertyTable, applyTo: any)
 	local specialKeys = {
-		self = {} :: {[Types.SpecialKey]: unknown},
-		descendants = {} :: {[Types.SpecialKey]: unknown},
-		ancestor = {} :: {[Types.SpecialKey]: unknown},
-		observer = {} :: {[Types.SpecialKey]: unknown}
+		self = {} :: { [Types.SpecialKey]: unknown },
+		descendants = {} :: { [Types.SpecialKey]: unknown },
+		ancestor = {} :: { [Types.SpecialKey]: unknown },
+		observer = {} :: { [Types.SpecialKey]: unknown },
 	}
 
 	for key, value in pairs(props) do
 		local keyType = xtypeof(key)
 
 		if keyType == "string" then
-			if key ~= "Parent" then
-				bindProperty(scope, applyTo, key :: string, value)
-			end
+			-- we shouldn't check parent here:
+			-- if string.lower(key :: string) ~= "parent" then
+			-- because bindProperty already handles parent setting
+			bindProperty(scope, applyTo, key :: string, value)
 		elseif keyType == "SpecialKey" then
 			local stage = (key :: Types.SpecialKey).stage
 			local keys = specialKeys[stage]
@@ -133,9 +99,10 @@ local function applyInstanceProps(
 		key:apply(scope, value, applyTo)
 	end
 
-	if props.Parent ~= nil then
-		bindProperty(scope, applyTo, "Parent", props.Parent)
-	end
+	-- we already handle Parent in bindProperty and keyType = string
+	-- if props.Parent ~= nil then
+	-- 	bindProperty(scope, applyTo, "Parent", props.Parent)
+	-- end
 
 	for key, value in pairs(specialKeys.ancestor) do
 		key:apply(scope, value, applyTo)

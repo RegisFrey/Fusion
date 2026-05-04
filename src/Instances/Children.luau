@@ -8,12 +8,12 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	an instance.
 ]]
 
-local Types = require("../../Types")
-local External = require("../External")
-local Observer = require("../../Graph/Observer")
-local peek = require("../../State/peek")
-local castToState = require("../../State/castToState")
-local doCleanup = require("../../Memory/doCleanup")
+local Types = require("../Types")
+local External = require("../Externals/External")
+local Observer = require("../Graph/Observer")
+local peek = require("../State/peek")
+local castToState = require("../State/castToState")
+local doCleanup = require("../Memory/doCleanup")
 
 type Set<T> = {[T]: unknown}
 
@@ -28,10 +28,10 @@ return {
 		self: Types.SpecialKey,
 		scope: Types.Scope<unknown>,
 		value: unknown,
-		applyTo: Instance
+		applyTo: any
 	)
-		local newParented: Set<Instance> = {}
-		local oldParented: Set<Instance> = {}
+		local newParented: Set<any> = {}
+		local oldParented: Set<any> = {}
 	
 		-- save scopes for state object observers
 		local newScopes: {[Types.StateObject<unknown>]: Types.Scope<unknown>} = {}
@@ -48,18 +48,14 @@ return {
 				child: unknown,
 				autoName: string?
 			)
-				local childType = typeof(child)
-	
-				if childType == "Instance" then
+				if External.isInstance(child) then
 					-- case 1; single instance
-					local child = child :: Instance
+					local child = child :: any
 	
 					newParented[child] = true
 					if oldParented[child] == nil then
 						-- wasn't previously present
-	
-						-- TODO: check for ancestry conflicts here
-						child.Parent = applyTo
+						External.setParent(child, applyTo)
 					else
 						-- previously here; we want to reuse, so remove from old
 						-- set so we don't encounter it during unparenting
@@ -67,7 +63,7 @@ return {
 					end
 	
 					if EXPERIMENTAL_AUTO_NAMING and autoName ~= nil then
-						child.Name = autoName
+						External.applyProperty(child, "Name", autoName)
 					end
 	
 				elseif castToState(child) then
@@ -93,7 +89,7 @@ return {
 	
 					newScopes[child] = childScope
 	
-				elseif childType == "table" then
+				elseif type(child) == "table" then
 					-- case 3; table of objects
 					local child = child :: {[unknown]: unknown}
 	
@@ -113,7 +109,7 @@ return {
 					end
 	
 				else
-					External.logWarn("unrecognisedChildType", childType)
+					External.logWarn("unrecognisedChildType", typeof(child))
 				end
 			end
 	
@@ -125,7 +121,7 @@ return {
 	
 			-- unparent any children that are no longer present
 			for oldInstance in pairs(oldParented) do
-				oldInstance.Parent = nil
+				External.setParent(oldInstance, nil)
 			end
 			table.clear(oldParented)
 	

@@ -141,6 +141,72 @@ function External.createInstance(scope: Types.Scope<unknown>, className: string,
 end
 
 --[[
+	Applies a property to an instance using the current external provider.
+]]
+function External.applyProperty(instance: any, key: string, value: any)
+	if currentProvider == nil then
+		External.logError("noExternal")
+	else
+		currentProvider.applyProperty(instance, key, value)
+	end
+end
+
+--[[
+	Returns a property from an instance using the current external provider.
+]]
+function External.getProperty(instance: any, key: string): any
+	if currentProvider == nil then
+		External.logError("noExternal")
+	else
+		return currentProvider.getProperty(instance, key)
+	end
+end
+
+--[[
+	Sets the parent of an instance using the current external provider.
+]]
+function External.setParent(instance: any, parent: any)
+	if currentProvider == nil then
+		External.logError("noExternal")
+	else
+		currentProvider.setParent(instance, parent)
+	end
+end
+
+--[[
+	Connects a callback to an event on an instance using the current external provider.
+]]
+function External.connectEvent(instance: any, eventName: string, callback: (...any) -> ()): () -> ()
+	if currentProvider == nil then
+		External.logError("noExternal")
+	else
+		return currentProvider.connectEvent(instance, eventName, callback)
+	end
+end
+
+--[[
+	Observes changes to a property on an instance using the current external provider.
+]]
+function External.observeChanges(instance: any, propertyName: string, callback: () -> ()): () -> ()
+	if currentProvider == nil then
+		External.logError("noExternal")
+	else
+		return currentProvider.observeChanges(instance, propertyName, callback)
+	end
+end
+
+--[[
+	Returns whether the given value is an instance.
+]]
+function External.isInstance(value: any): boolean
+	if currentProvider == nil then
+		return false
+	else
+		return currentProvider.isInstance(value)
+	end
+end
+
+--[[
 	Returns the special keys provided by the current external provider.
 ]]
 function External.getSpecialKeys(): { [string]: any }

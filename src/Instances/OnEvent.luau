@@ -8,17 +8,10 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	an instance.
 ]]
 
-local Types = require("../../Types")
-local External = require("../External")
+local Types = require("../Types")
+local External = require("../Externals/External")
 
 local keyCache: {[string]: Types.SpecialKey} = {}
-
-local function getProperty_unsafe(
-	instance: Instance,
-	property: string
-)
-	return (instance :: any)[property]
-end
 
 local function OnEvent(
 	eventName: string
@@ -33,15 +26,12 @@ local function OnEvent(
 				self: Types.SpecialKey,
 				scope: Types.Scope<unknown>,
 				callback: unknown,
-				applyTo: Instance
+				applyTo: any
 			)
-				local ok, event = pcall(getProperty_unsafe, applyTo, eventName)
-				if not ok or typeof(event) ~= "RBXScriptSignal" then
-					External.logError("cannotConnectEvent", nil, applyTo.ClassName, eventName)
-				elseif typeof(callback) ~= "function" then
+				if type(callback) ~= "function" then
 					External.logError("invalidEventHandler", nil, eventName)
 				else
-					table.insert(scope, event:Connect(callback :: any))
+					table.insert(scope, External.connectEvent(applyTo, eventName, callback :: any))
 				end
 			end
 		}

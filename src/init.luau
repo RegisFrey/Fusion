@@ -32,10 +32,10 @@ export type Value<T, S = T> = Types.Value<T, S>
 export type Version = Types.Version
 
 if game then
-	local RobloxExternal = require("@self/Externals/Roblox/RobloxExternal")
+	local RobloxExternal = require("@self/Externals/Roblox")
 	External.setExternalProvider(RobloxExternal)
 else
-	local WebExternal = require("@self/Externals/Web/WebExternal")
+	local WebExternal = require("@self/Externals/Web")
 	External.setExternalProvider(WebExternal)
 	-- For now web is our only other target
 	-- so we can condition on game.
@@ -78,6 +78,11 @@ local FusionTable = {
 }
 
 -- Mixin platform-specific special keys and behaviors
+local coreSpecialKeys = require("@self/Instances")
+for name, value in pairs(coreSpecialKeys) do
+	FusionTable[name] = value
+end
+
 for name, value in pairs(External.getSpecialKeys()) do
 	FusionTable[name] = value
 end

@@ -27,7 +27,17 @@ export function prepareBridge () {
             if (key == 'class') key = 'className'
             if (key == 'text') key = 'textContent'
             // @ts-ignore
-            el[key.toLowerCase()] = value
+            el[key] = value
+        },
+
+        observeProperty: (el: HTMLElement, key: string, callback: () => any) => {
+            const observer = new MutationObserver(callback)
+            observer.observe(el, {
+                attributeFilter: [key],
+            })
+            return function cleanup () {
+                observer.disconnect()
+            }
         },
         
         setParent: (el: HTMLElement, parent?: HTMLElement|"DOCUMENT_BODY") => {

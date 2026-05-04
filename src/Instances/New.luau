@@ -20,6 +20,9 @@ local function New(scope: Types.Scope<unknown>, className: string)
 	-- upvalue is shared between the two curried function calls, so this will
 	-- open incredible cross-codebase wormholes like you've never seen before.
 	return function(props: Types.PropertyTable): any
+		-- TODO: LATER: Can we somehow type this by return value from External.createInstance ?
+		-- e.g. Roblox External.createInstance is returning an Instance
+		-- e.g. Web External.createInstance is returning an HTMLElement
 		local instance = External.createInstance(scope, className, props)
 		table.insert(scope, instance)
 		applyInstanceProps(scope, props, instance)
