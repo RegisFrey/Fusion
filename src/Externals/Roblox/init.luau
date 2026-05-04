@@ -153,7 +153,13 @@ function RobloxExternal.setParent(instance: Instance, parent: Instance?)
 end
 
 function RobloxExternal.connectEvent(instance: Instance, eventName: string, callback: (...any) -> ()): () -> ()
-	local connection = (instance :: any)[eventName]:Connect(callback)
+	local ok, event = pcall(function()
+		return (instance :: any)[eventName]
+	end)
+	if not ok or typeof(event) ~= "RBXScriptSignal" then
+		External.logError("cannotConnectEvent", nil, instance.ClassName, eventName)
+	end
+	local connection = event:Connect(callback)
 	return function()
 		connection:Disconnect()
 	end
