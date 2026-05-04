@@ -432,18 +432,20 @@ curve has to be specified using Roblox's `TweenInfo` data type.
 
 <div class="fusiondoc-error-api-section" markdown>
 
-## noTaskScheduler
+## noExternal
 
 ```
-Fusion is not connected to an external task scheduler.
+Fusion is not connected to an external task schedule and instance creator.
 ```
 
-Fusion depends on a task scheduler being present to perform certain time-related
+Fusion depends on a provided `External` api for its task scheduler being present to perform certain time-related
 tasks such as deferral, delays, or updating animations. You'll need to define a
-set of standard task scheduler functions that Fusion can use for those purposes.
+set of standard task scheduler functions in an External that Fusion can use for those purposes.
+
+Fusion also depends on a set of instance/element creation and parenting functions to create and manage instances. You'll have to define those functions in an External as well. 
 
 Roblox users should never see this error, as Fusion automatically connects to
-Roblox's task scheduling APIs.
+Roblox's task scheduling APIs and Roblox's instance creation.
 </div>
 
 -----

@@ -30,7 +30,7 @@ return {
 	mistypedSpringDamping = "The damping ratio for a spring must be a number. (got a %s)",
 	mistypedSpringSpeed = "The speed of a spring must be a number. (got a %s)",
 	mistypedTweenInfo = "The tween info of a tween must be a TweenInfo. (got a %s)",
-	noTaskScheduler = "Fusion is not connected to an external task scheduler.",
+	noExternal = "Fusion is not connected to an external task scheduler and instance mapper.",
 	poisonedScope = "Attempted to use a scope after it's been destroyed; %s",
 	propertySetError = "Error setting property:\nERROR_MESSAGE",
 	springNanGoal = "A spring was given a NaN goal, so some simulation has been skipped. Ensure no springs have NaN goals.",
@@ -42,5 +42,5 @@ return {
 	unrecognisedChildType = "'%s' type children aren't accepted by `[Children]`.",
 	unrecognisedPropertyKey = "'%s' keys aren't accepted in property tables.",
 	unrecognisedPropertyStage = "'%s' isn't a valid stage for a special key to be applied at.",
-	useAfterDestroy = "%s is no longer valid - it was destroyed before %s. See discussion #292 on GitHub for advice."
+	useAfterDestroy = "%s is no longer valid - it was destroyed before %s. See discussion #292 on GitHub for advice.",
 }
