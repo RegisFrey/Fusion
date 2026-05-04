@@ -31,14 +31,20 @@ export type Use = Types.Use
 export type Value<T, S = T> = Types.Value<T, S>
 export type Version = Types.Version
 
--- Down the line, this will be conditional based on whether Fusion is being
--- compiled for Roblox.
-do
+if game then
 	local RobloxExternal = require("@self/Externals/Roblox/RobloxExternal")
 	External.setExternalProvider(RobloxExternal)
+else
+	local WebExternal = require("@self/Externals/Web/WebExternal")
+	External.setExternalProvider(WebExternal)
+	-- For now web is our only other target
+	-- so we can condition on game.
+	-- but it'd be good to have a better way of choosing
+	-- or providing an External
+	-- perhaps we just make user need to call this?
 end
 
-local Fusion: Fusion = table.freeze({
+local FusionTable = {
 	-- General
 	version = { major = 0, minor = 4, isRelease = false },
 	Contextual = require("@self/Utility/Contextual"),
@@ -62,22 +68,20 @@ local Fusion: Fusion = table.freeze({
 	peek = require("@self/State/peek"),
 	Value = require("@self/State/Value"),
 
-	-- Roblox API
-	Attribute = require("@self/Instances/Attribute"),
-	AttributeChange = require("@self/Instances/AttributeChange"),
-	AttributeOut = require("@self/Instances/AttributeOut"),
-	Child = require("@self/Instances/Child"),
-	Children = require("@self/Instances/Children"),
-	Hydrate = require("@self/Instances/Hydrate"),
+	-- Base API
 	New = require("@self/Instances/New"),
-	OnChange = require("@self/Instances/OnChange"),
-	OnEvent = require("@self/Instances/OnEvent"),
-	Out = require("@self/Instances/Out"),
-	Tag = require("@self/Instances/Tag"),
+	Child = require("@self/Instances/Child"),
 
 	-- Animation
 	Tween = require("@self/Animation/Tween"),
 	Spring = require("@self/Animation/Spring"),
-})
+}
+
+-- Mixin platform-specific special keys and behaviors
+for name, value in pairs(External.getSpecialKeys()) do
+	FusionTable[name] = value
+end
+
+local Fusion: Fusion = table.freeze(FusionTable :: any)
 
 return Fusion

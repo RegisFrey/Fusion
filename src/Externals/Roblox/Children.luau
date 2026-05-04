@@ -8,12 +8,12 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	an instance.
 ]]
 
-local Types = require("../Types")
-local External = require("../Externals/External")
-local Observer = require("../Graph/Observer")
-local peek = require("../State/peek")
-local castToState = require("../State/castToState")
-local doCleanup = require("../Memory/doCleanup")
+local Types = require("../../Types")
+local External = require("../External")
+local Observer = require("../../Graph/Observer")
+local peek = require("../../State/peek")
+local castToState = require("../../State/castToState")
+local doCleanup = require("../../Memory/doCleanup")
 
 type Set<T> = {[T]: unknown}
 

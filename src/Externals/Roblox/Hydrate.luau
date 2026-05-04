@@ -8,8 +8,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	properties, event handlers and other attributes on the instance.
 ]]
 
-local Types = require("../Types")
-local applyInstanceProps = require("./applyInstanceProps")
+local Types = require("../../Types")
+local applyInstanceProps = require("../../Instances/applyInstanceProps")
 
 local function Hydrate(
 	scope: Types.Scope<unknown>,

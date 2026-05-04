@@ -8,8 +8,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	an attribute change on an instance.
 ]]
 
-local Types = require("../Types")
-local External = require("../Externals/External")
+local Types = require("../../Types")
+local External = require("../External")
 
 local keyCache: {[string]: Types.SpecialKey} = {}
 

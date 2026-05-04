@@ -152,4 +152,30 @@ function External.lastUpdateStep()
 	return lastUpdateStep
 end
 
+--[[
+	Creates a new instance using the current external provider.
+]]
+function External.createInstance(
+	scope: Types.Scope<unknown>,
+	className: string,
+	props: Types.PropertyTable
+): any
+	if currentProvider == nil then
+		External.logError("noTaskScheduler")
+	else
+		return currentProvider.createInstance(scope, className, props)
+	end
+end
+
+--[[
+	Returns the special keys provided by the current external provider.
+]]
+function External.getSpecialKeys(): {[string]: any}
+	if currentProvider == nil then
+		return {}
+	else
+		return currentProvider.specialKeys
+	end
+end
+
 return External

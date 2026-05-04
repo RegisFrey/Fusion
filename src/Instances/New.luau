@@ -10,36 +10,19 @@ local task = nil -- Disable usage of Roblox's task scheduler
 
 local Types = require("../Types")
 local External = require("../Externals/External")
-local defaultProps = require("./defaultProps")
 local applyInstanceProps = require("./applyInstanceProps")
 
-type Component = (Types.PropertyTable) -> Instance
+-- TODO: RESOLVE/IMPROVE: Typing gets tricky, e.g. RobloxExternal returns an Instance. WebExternal should return the HTMLElement.
+type Component = (Types.PropertyTable) -> any
 
-local function New(
-	scope: Types.Scope<unknown>,
-	className: string
-)
+local function New(scope: Types.Scope<unknown>, className: string)
 	-- This might look appealing to try and cache. But please don't. The scope
 	-- upvalue is shared between the two curried function calls, so this will
 	-- open incredible cross-codebase wormholes like you've never seen before.
-	return function(
-		props: Types.PropertyTable
-	): Instance
-		local ok, instance = pcall(Instance.new, className)
-		if not ok then
-			External.logError("cannotCreateClass", nil, className)
-		end
-
-		local classDefaults = defaultProps[className]
-		if classDefaults ~= nil then
-			for defaultProp, defaultValue in pairs(classDefaults) do
-				(instance :: any)[defaultProp] = defaultValue
-			end
-		end
-
+	return function(props: Types.PropertyTable): any
+		local instance = External.createInstance(scope, className, props)
 		table.insert(scope, instance)
 		applyInstanceProps(scope, props, instance)
-
 		return instance
 	end
 end

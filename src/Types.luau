@@ -300,7 +300,15 @@ export type ExternalProvider = {
 		resume: () -> ()
 	) -> (),
 	startScheduler: () -> (),
-	stopScheduler: () -> ()
+	stopScheduler: () -> (),
+
+	createInstance: (
+		scope: Scope<unknown>,
+		className: string,
+		props: PropertyTable
+	) -> any,
+
+	specialKeys: {[string]: any}
 }
 
 export type ExternalDebugger = {

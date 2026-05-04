@@ -9,12 +9,26 @@
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
-local External = require("../External")
+local Types = require("@self/../../Types")
+local External = require("@self/../External")
+local defaultProps = require("@self/defaultProps")
 
 local RobloxExternal = {}
 
 RobloxExternal.policies = {
 	allowWebLinks = RunService:IsStudio(),
+}
+
+RobloxExternal.specialKeys = {
+	Attribute = require("./Attribute"),
+	AttributeChange = require("./AttributeChange"),
+	AttributeOut = require("./AttributeOut"),
+	Children = require("./Children"),
+	OnChange = require("./OnChange"),
+	OnEvent = require("./OnEvent"),
+	Out = require("./Out"),
+	Tag = require("./Tag"),
+	Hydrate = require("./Hydrate"),
 }
 
 --[[
@@ -82,6 +96,25 @@ function RobloxExternal.stopScheduler()
 		stopSchedulerFunc()
 		stopSchedulerFunc = nil
 	end
+end
+
+function RobloxExternal.createInstance(
+	scope: Types.Scope<unknown>,
+	className: string,
+	props: Types.PropertyTable
+): Instance
+	local ok, instance = pcall(Instance.new, className)
+	if not ok then
+		External.logError("cannotCreateClass", nil, className)
+	end
+
+	local classDefaults = defaultProps[className]
+	if classDefaults ~= nil then
+		for defaultProp, defaultValue in pairs(classDefaults) do
+			(instance :: any)[defaultProp] = defaultValue
+		end
+	end
+	return instance
 end
 
 return RobloxExternal

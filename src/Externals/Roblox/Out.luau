@@ -8,12 +8,12 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	an instance into an automatically-updated Value object.
 ]]
 
-local Types = require("../Types")
-local External = require("../Externals/External")
+local Types = require("../../Types")
+local External = require("../External")
 -- Memory
-local checkLifetime = require("../Memory/checkLifetime")
+local checkLifetime = require("../../Memory/checkLifetime")
 -- State
-local castToState = require("../State/castToState")
+local castToState = require("../../State/castToState")
 
 local keyCache: {[string]: Types.SpecialKey} = {}
 
