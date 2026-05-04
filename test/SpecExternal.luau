@@ -3,7 +3,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Fusion = ReplicatedStorage.Fusion
 
-local External = require(Fusion.External)
+local External = require(Fusion.Externals.External)
 
 local SpecExternal = {}
 

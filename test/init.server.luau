@@ -6,7 +6,7 @@ local TestVars = require(script.TestVars)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Fusion = ReplicatedStorage.Fusion
 
-local External = require(Fusion.External)
+local External = require(Fusion.Externals.External)
 local SpecExternal = require(script.SpecExternal)
 
 -- run unit tests

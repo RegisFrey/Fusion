@@ -6,7 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Fusion = ReplicatedStorage.Fusion
 
 local New = require(Fusion.Instances.New)
-local Attribute = require(Fusion.Instances.Attribute)
+local Attribute = require(Fusion.Externals.Roblox.Attribute)
 local Value = require(Fusion.State.Value)
 local doCleanup = require(Fusion.Memory.doCleanup)
 

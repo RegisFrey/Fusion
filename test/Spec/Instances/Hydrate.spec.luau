@@ -5,7 +5,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Fusion = ReplicatedStorage.Fusion
 
-local Hydrate = require(Fusion.Instances.Hydrate)
+local Hydrate = require(Fusion.Externals.Roblox.Hydrate)
 local doCleanup = require(Fusion.Memory.doCleanup)
 
 return function()
