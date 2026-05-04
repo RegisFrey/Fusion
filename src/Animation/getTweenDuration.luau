@@ -8,11 +8,9 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	finishes moving. The result may be infinite if the tween repeats forever.
 ]]
 
-local TweenService = game:GetService("TweenService")
+local TweenService = require("./TweenService")
 
-local function getTweenDuration(
-	tweenInfo: TweenInfo
-): number
+local function getTweenDuration(tweenInfo: TweenService.TweenInfo): number
 	if tweenInfo.RepeatCount <= -1 then
 		return math.huge
 	end

@@ -30,6 +30,7 @@ export type Tween<T> = Types.Tween<T>
 export type Use = Types.Use
 export type Value<T, S = T> = Types.Value<T, S>
 export type Version = Types.Version
+export type TweenInfo = Types.TweenInfo
 
 if game then
 	local RobloxExternal = require("@self/Externals/Roblox")
@@ -75,6 +76,9 @@ local FusionTable = {
 	-- Animation
 	Tween = require("@self/Animation/Tween"),
 	Spring = require("@self/Animation/Spring"),
+	TweenInfo = require("@self/Animation/TweenService").TweenInfo,
+	EasingStyle = require("@self/Animation/TweenService").EasingStyle,
+	EasingDirection = require("@self/Animation/TweenService").EasingDirection,
 }
 
 -- Mixin platform-specific special keys and behaviors

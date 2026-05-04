@@ -8,7 +8,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	tween between two values over time.
 ]]
 
-local TweenService = game:GetService("TweenService")
+local TweenService = require("./TweenService")
+type TweenInfo = TweenService.TweenInfo
 
 local function getTweenRatio(
 	tweenInfo: TweenInfo,

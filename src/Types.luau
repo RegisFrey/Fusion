@@ -35,6 +35,16 @@ export type Animatable =
 	Vector2int16 |
 	Vector3 |
 	Vector3int16
+ 
+-- Information about how a tween should behave.
+export type TweenInfo = {
+	Time: number,
+	EasingStyle: number,
+	EasingDirection: number,
+	RepeatCount: number,
+	Reverses: boolean,
+	DelayTime: number,
+}
 
 -- A task which can be accepted for cleanup.
 export type Task =

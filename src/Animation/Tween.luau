@@ -26,8 +26,17 @@ local Stopwatch = require("./Stopwatch")
 local lerpType = require("./lerpType")
 local getTweenRatio = require("./getTweenRatio")
 local getTweenDuration = require("./getTweenDuration")
+local TweenService = require("./TweenService")
 -- Utility
 local nicknames = require("../Utility/nicknames")
+
+local EasingStyle = TweenService.EasingStyle
+local EasingDirection = TweenService.EasingDirection
+local TweenInfo = TweenService.TweenInfo
+
+export type EasingStyle = TweenService.EasingStyle
+export type EasingDirection = TweenService.EasingDirection
+export type TweenInfo = TweenService.TweenInfo
 
 export type Self<T> = Types.Tween<T> & {
 	_activeDuration: number,
@@ -45,7 +54,7 @@ class.type = "State"
 class.kind = "Tween"
 class.timeliness = "eager"
 
-local METATABLE = table.freeze {__index = class}
+local METATABLE = table.freeze({ __index = class })
 
 local function Tween<T>(
 	scope: Types.Scope<unknown>,
@@ -60,26 +69,23 @@ local function Tween<T>(
 		stopwatch = Stopwatch(scope, ExternalTime(scope))
 	end
 
-	local self: Self<T> = setmetatable(
-		{
-			createdAt = createdAt,
-			dependencySet = {},
-			dependentSet = {},
-			lastChange = nil,
-			scope = scope,
-			validity = "invalid",
-			_activeDuration = nil,
-			_activeElapsed = nil,
-			_activeFrom = nil,
-			_activeTo = nil,
-			_activeTweenInfo = nil,
-			_EXTREMELY_DANGEROUS_usedAsValue = peek(goal),
-			_goal = goal,
-			_stopwatch = stopwatch,
-			_tweenInfo = tweenInfo or TweenInfo.new()
-		},
-		METATABLE
-	) :: any
+	local self: Self<T> = setmetatable({
+		createdAt = createdAt,
+		dependencySet = {},
+		dependentSet = {},
+		lastChange = nil,
+		scope = scope,
+		validity = "invalid",
+		_activeDuration = nil,
+		_activeElapsed = nil,
+		_activeFrom = nil,
+		_activeTo = nil,
+		_activeTweenInfo = nil,
+		_EXTREMELY_DANGEROUS_usedAsValue = peek(goal),
+		_goal = goal,
+		_stopwatch = stopwatch,
+		_tweenInfo = tweenInfo or TweenInfo.new(),
+	}, METATABLE) :: any
 	local destroy = function()
 		self.scope = nil
 		for dependency in pairs(self.dependencySet) do
@@ -92,8 +98,10 @@ local function Tween<T>(
 
 	if goalState ~= nil then
 		checkLifetime.bOutlivesA(
-			scope, self.oldestTask,
-			goalState.scope, goalState.oldestTask,
+			scope,
+			self.oldestTask,
+			goalState.scope,
+			goalState.oldestTask,
 			checkLifetime.formatters.animationGoal
 		)
 	end
@@ -101,9 +109,12 @@ local function Tween<T>(
 	local tweenInfoState = castToState(tweenInfo)
 	if tweenInfoState ~= nil then
 		checkLifetime.bOutlivesA(
-			scope, self.oldestTask,
-			tweenInfoState.scope, tweenInfoState.oldestTask,
-			checkLifetime.formatters.parameter, "tween info"
+			scope,
+			self.oldestTask,
+			tweenInfoState.scope,
+			tweenInfoState.oldestTask,
+			checkLifetime.formatters.parameter,
+			"tween info"
 		)
 	end
 
@@ -114,9 +125,7 @@ local function Tween<T>(
 	return self
 end
 
-function class._evaluate<T>(
-	self: Self<T>
-): boolean
+function class._evaluate<T>(self: Self<T>): boolean
 	local goal = castToState(self._goal)
 	-- Allow non-state goals to pass through transparently.
 	if goal == nil then
@@ -134,9 +143,9 @@ function class._evaluate<T>(
 	local tweenInfo = peek(self._tweenInfo) :: TweenInfo
 	-- Restart animation when the goal changes, or if the tween info changes
 	-- partway through another animation.
-	if 
-		self._activeTo ~= newTweenTo or
-		(self._activeElapsed < self._activeDuration and self._activeTweenInfo ~= tweenInfo)
+	if
+		self._activeTo ~= newTweenTo
+		or (self._activeElapsed < self._activeDuration and self._activeTweenInfo ~= tweenInfo)
 	then
 		self._activeDuration = getTweenDuration(tweenInfo)
 		self._activeFrom = self._EXTREMELY_DANGEROUS_usedAsValue
@@ -148,9 +157,9 @@ function class._evaluate<T>(
 	depend(self, stopwatch)
 	self._activeElapsed = peek(stopwatch)
 	if
-		self._activeFrom == self._activeTo or -- endpoints match
-		self._activeElapsed >= self._activeDuration or -- animation is done
-		typeof(self._activeTo) ~= typeof(self._activeFrom) -- type difference
+		self._activeFrom == self._activeTo -- endpoints match
+		or self._activeElapsed >= self._activeDuration -- animation is done
+		or typeof(self._activeTo) ~= typeof(self._activeFrom) -- type difference
 	then
 		self._activeFrom = self._activeTo
 		self._activeElapsed = self._activeDuration
