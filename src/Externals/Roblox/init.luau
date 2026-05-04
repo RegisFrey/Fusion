@@ -20,11 +20,11 @@ RobloxExternal.policies = {
 }
 
 RobloxExternal.specialKeys = {
-	Attribute = require("./Attribute"),
-	AttributeChange = require("./AttributeChange"),
-	AttributeOut = require("./AttributeOut"),
-	Tag = require("./Tag"),
-	Hydrate = require("./Hydrate"),
+	Attribute = require("@self/Attribute"),
+	AttributeChange = require("@self/AttributeChange"),
+	AttributeOut = require("@self/AttributeOut"),
+	Tag = require("@self/Tag"),
+	Hydrate = require("@self/Hydrate"),
 }
 
 --[[
@@ -113,18 +113,11 @@ function RobloxExternal.createInstance(
 	return instance
 end
 
-local function setProperty_unsafe(
-	instance: Instance,
-	property: string,
-	value: unknown
-)
+local function setProperty_unsafe(instance: Instance, property: string, value: unknown)
 	(instance :: any)[property] = value
 end
 
-local function testPropertyAssignable(
-	instance: Instance,
-	property: string
-)
+local function testPropertyAssignable(instance: Instance, property: string)
 	(instance :: any)[property] = (instance :: any)[property]
 end
 
@@ -141,7 +134,7 @@ function RobloxExternal.applyProperty(instance: Instance, key: string, value: an
 			local expectedType = typeof((instance :: any)[key])
 
 			if givenType == expectedType then
-				-- We can't use parseError here easily without importing it, 
+				-- We can't use parseError here easily without importing it,
 				-- but External.logErrorNonFatal expects a string.
 				External.logErrorNonFatal("propertySetError", nil, tostring(err))
 			else

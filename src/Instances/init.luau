@@ -8,8 +8,8 @@ local task = nil -- Disable usage of Roblox's task scheduler
 ]]
 
 return {
-	Children = require("./Children"),
-	OnEvent = require("./OnEvent"),
-	OnChange = require("./OnChange"),
-	Out = require("./Out"),
+	Children = require("@self/Children"),
+	OnEvent = require("@self/OnEvent"),
+	OnChange = require("@self/OnChange"),
+	Out = require("@self//Out"),
 }

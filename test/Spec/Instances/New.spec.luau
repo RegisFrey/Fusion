@@ -6,7 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Fusion = ReplicatedStorage.Fusion
 
 local New = require(Fusion.Instances.New)
-local defaultProps = require(Fusion.Instances.defaultProps)
+local defaultProps = require(Fusion.Externals.Roblox.defaultProps)
 local doCleanup = require(Fusion.Memory.doCleanup)
 
 return function()
