@@ -1,9 +1,5 @@
-local web = require("@web")
--- The @web require is an alias that our bundler will replace
--- with a table of exposed web functions / constants
--- perhaps we provide a stub in files for proper typing / autocomplete
--- then bundler connects that stub to a proper bridge variable
 local External = require("@self/../External")
+local web = require("@self/bridge")
 
 local WebExternal = {}
 

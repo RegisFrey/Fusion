@@ -1,6 +1,4 @@
 {
 	"languageMode": "strict",
-	"aliases": {
-		"luaupkg": "./LuauPackages"
-	}
+	"aliases": {}
 }

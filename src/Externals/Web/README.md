@@ -41,8 +41,8 @@ startApp().catch(console.error);
 and a sample app.luau might be:
 
 ```luau
-local web = require("@web")
-local Fusion = require("@luaupkg/fusion")
+local web = require("@self/bridge")
+local Fusion = require("@fusion")
 local scope = Fusion.scoped(Fusion)
 
 local clicks = scope:Value(0)
@@ -66,6 +66,30 @@ scope:New("div")({
 })
 ```
 
-`local web = require("@web")` is an alias that the
-bundler needs to replace with code to recieve the 
-values from the bridge. E.g. we wrap whole bundle in handler for grabbing incoming bridge value table, then attach that table to a variable, and return that variable to anyone requiring the @web alias.
+Web external uses should have thier bundler wrap the whole bundle in a fn that recieves the web bridge as an argument and sets a global variable (bridge.luau expects `__WEB_BRIDGE`) in order for that to get exposed to all requesters of the bridge.luau.
+
+It is also reasonable for a consumer to alias the bridge.luau. e.g. via thier `.luaurc`
+```json:.luaurc
+{
+  "languageMode": "strict",
+  "aliases": {
+    "fusion": "./Packages/fusion@v0.3.0-externalized/src",
+    "web-bridge": "./Packages/fusion@v0.3.0-externalized/src/Externals/Web/bridge"
+  }
+}`
+```
+
+Possibly also aliasing in a darklua config:
+```json:.darklua.json
+"bundle": {
+    "require_mode": {
+      "name": "luau",
+      "aliases": {
+        "@fusion": "./Packages/fusion@v0.3.0-externalized/src",
+        "@web-bridge": "./Packages/fusion@v0.3.0-externalized/src/Externals/Web/bridge.luau"
+      }
+    }
+},
+```
+
+Since you may need to import it for the root constants. However, importing the web bridge directly should be limited. Mostly you can let Fusion internally use it.
