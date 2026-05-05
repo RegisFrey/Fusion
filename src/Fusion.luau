@@ -79,6 +79,32 @@ local FusionTable = {
 
 	-- e.g. Fusion.TweenMachine.Info, Fusion.TweenMachine.EasingStyle
 	TweenMachine = require("./Animation/TweenMachine"),
+
+	-- scoped delay with auto cleanup
+	delay = function(scope, seconds, callback)
+		local cancelDelay
+		local function cleanupFromScope()
+			for i = #scope, 1, -1 do
+				if scope[i] == cancelDelay then
+					table.remove(scope, i)
+					break
+				end
+			end
+		end
+
+		local function onFinish()
+			callback()
+			cleanupFromScope()
+		end
+
+		cancelDelay = External.doTaskAfter(seconds, onFinish)
+		table.insert(scope, cancelDelay)
+
+		return function()
+			cancelDelay()
+			cleanupFromScope()
+		end
+	end,
 }
 
 -- Mixin platform-specific special keys and behaviors

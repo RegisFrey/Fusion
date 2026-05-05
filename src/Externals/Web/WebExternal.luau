@@ -68,6 +68,13 @@ function WebExternal.doTaskDeferred(resume)
 	end
 end
 
+function WebExternal.doTaskAfter(seconds: number, callback: () -> ()): () -> ()
+	local id = web.setTimeout(callback, seconds * 1000)
+	return function()
+		web.clearTimeout(id)
+	end
+end
+
 function WebExternal.logErrorNonFatal(errorString)
 	if web.console and web.console.error then
 		web.console.error(errorString)

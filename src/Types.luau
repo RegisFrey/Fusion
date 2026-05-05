@@ -289,6 +289,8 @@ export type Fusion = {
 	AttributeChange: (attributeName: string) -> SpecialKey,
 	AttributeOut: (attributeName: string) -> SpecialKey,
 	Tag: (tagName: string) -> SpecialKey,
+
+	delay: (scope: Scope<unknown>, seconds: number, callback: () -> ()) -> (() -> ()),
 }
 
 export type ExternalProvider = {
@@ -309,6 +311,10 @@ export type ExternalProvider = {
 	doTaskDeferred: (
 		resume: () -> ()
 	) -> (),
+	doTaskAfter: (
+		seconds: number,
+		callback: () -> ()
+	) -> (() -> ()),
 	startScheduler: () -> (),
 	stopScheduler: () -> (),
 

@@ -29,6 +29,22 @@ function SpecExternal.doTaskDeferred(resume: () -> ())
 	table.insert(queue, coroutine.create(resume))
 end
 
+--[[
+	Sends a task to be executed after a certain number of seconds.
+	Returns a function that can be used to cancel the task.
+]]
+function SpecExternal.doTaskAfter(seconds: number, callback: () -> ()): () -> ()
+	local cancelled = false
+	task.delay(seconds, function()
+		if not cancelled then
+			callback()
+		end
+	end)
+	return function()
+		cancelled = true
+	end
+end
+
 function SpecExternal.deferSelfForTesting()
 	table.insert(queue, coroutine.running())
 	coroutine.yield()

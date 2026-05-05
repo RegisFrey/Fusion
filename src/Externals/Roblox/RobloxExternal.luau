@@ -41,6 +41,13 @@ function RobloxExternal.doTaskDeferred(resume: () -> ())
 	task.defer(resume)
 end
 
+function RobloxExternal.doTaskAfter(seconds: number, callback: () -> ()): () -> ()
+	local thread = task.delay(seconds, callback)
+	return function()
+		task.cancel(thread)
+	end
+end
+
 --[[
 	Errors in a different thread to preserve the flow of execution.
 ]]

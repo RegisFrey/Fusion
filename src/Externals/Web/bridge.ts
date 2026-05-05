@@ -55,6 +55,13 @@ export function prepareBridge () {
             }
         },
 
+        addEventListener: (el: HTMLElement, name: string, callback: (...args: any[]) => void) => {
+            el.addEventListener(name, callback)
+            return function disconnect () {
+                el.removeEventListener(name, callback)
+            }
+        },
+
         // expose timing specific functions -----
         performance,
         setTimeout: (cb: any, ms: number) => window.setTimeout(cb, ms),

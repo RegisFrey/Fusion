@@ -62,6 +62,18 @@ function External.doTaskDeferred(resume: () -> ())
 end
 
 --[[
+	Sends a task to be executed after a certain number of seconds.
+	Returns a function that can be used to cancel the task.
+]]
+function External.doTaskAfter(seconds: number, callback: () -> ()): () -> ()
+	if currentProvider == nil then
+		External.logError("noExternal")
+	else
+		return currentProvider.doTaskAfter(seconds, callback)
+	end
+end
+
+--[[
 	Errors in the current thread and halts execution.
 ]]
 function External.logError(messageID: string, errObj: Types.Error?, ...: unknown): never

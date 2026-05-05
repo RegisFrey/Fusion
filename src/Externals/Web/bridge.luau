@@ -12,9 +12,11 @@ export type WebBridge = {
 	--- Observes a property and returns a cleanup function
 	observeProperty: (el: HTMLElement, key: string, onUpdate: () -> nil) -> () -> nil,
 	setParent: (el: HTMLElement, parent: (HTMLElement | "DOCUMENT_BODY")?) -> nil,
-
+	-- Adds a listener, returns a cleanup function
+	addEventListener: (el: HTMLElement, name: string, callback: () -> nil) -> () -> nil,
 	performance: any,
 	setTimeout: (cb: () -> any, ms: number) -> number,
+	clearTimeout: (id: number) -> nil,
 	queueMicrotask: (cb: () -> any) -> any,
 	requestAnimationFrame: (cb: () -> any) -> any,
 }
