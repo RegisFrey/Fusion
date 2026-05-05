@@ -77,6 +77,7 @@ local FusionTable = {
 	Tween = require("./Animation/Tween"),
 	Spring = require("./Animation/Spring"),
 
+	-- Clarified our tweens stuff has distinct interface from TweenService
 	-- e.g. Fusion.TweenMachine.Info, Fusion.TweenMachine.EasingStyle
 	TweenMachine = require("./Animation/TweenMachine"),
 
