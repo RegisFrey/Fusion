@@ -22,8 +22,11 @@ export function prepareBridge () {
                 console.warn(`Tried to set key "${key}" on invalid element`)
             };
             key = key.toLowerCase()
+            if (key == 'style') {
+                el.style.cssText = value
+                return
+            }
             if (key == 'data') key = 'dataset'
-            if (key == 'style') key = 'cssText'
             if (key == 'class') key = 'className'
             if (key == 'text') key = 'textContent'
             if (key == 'name') key = 'id' // but id should take priority
