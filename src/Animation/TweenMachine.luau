@@ -4,7 +4,7 @@
 local task = nil -- Disable usage of Roblox's task scheduler
 
 --[[
-	A shim for Roblox's TweenService, providing easing functions on all platforms.
+	A shim for Roblox's TweenMachine, providing easing functions on all platforms.
 	Easing functions are ported from the Godot engine's implementation, which
 	matches Roblox's behavior.
 ]]
@@ -98,13 +98,13 @@ local function getEasingValue(alpha: number, style: EasingStyle, direction: Easi
 		if direction == EasingDirection.In then
 			return c3 * alpha * alpha * alpha - c1 * alpha * alpha
 		elseif direction == EasingDirection.Out then
-			return 1 + c3 * (alpha - 1)^3 + c1 * (alpha - 1)^2
+			return 1 + c3 * (alpha - 1) ^ 3 + c1 * (alpha - 1) ^ 2
 		elseif direction == EasingDirection.InOut then
 			local c2 = c1 * 1.525
 			if alpha < 0.5 then
-				return ((2 * alpha)^2 * ((c2 + 1) * 2 * alpha - c2)) / 2
+				return ((2 * alpha) ^ 2 * ((c2 + 1) * 2 * alpha - c2)) / 2
 			else
-				return ((2 * alpha - 2)^2 * ((c2 + 1) * (alpha * 2 - 2) + c2) + 2) / 2
+				return ((2 * alpha - 2) ^ 2 * ((c2 + 1) * (alpha * 2 - 2) + c2) + 2) / 2
 			end
 		end
 	elseif style == EasingStyle.Quad then
@@ -116,31 +116,31 @@ local function getEasingValue(alpha: number, style: EasingStyle, direction: Easi
 			if alpha < 0.5 then
 				return 2 * alpha * alpha
 			else
-				return 1 - (-2 * alpha + 2)^2 / 2
+				return 1 - (-2 * alpha + 2) ^ 2 / 2
 			end
 		end
 	elseif style == EasingStyle.Quart then
 		if direction == EasingDirection.In then
 			return alpha * alpha * alpha * alpha
 		elseif direction == EasingDirection.Out then
-			return 1 - (1 - alpha)^4
+			return 1 - (1 - alpha) ^ 4
 		elseif direction == EasingDirection.InOut then
 			if alpha < 0.5 then
-				return 8 * alpha^4
+				return 8 * alpha ^ 4
 			else
-				return 1 - (-2 * alpha + 2)^4 / 2
+				return 1 - (-2 * alpha + 2) ^ 4 / 2
 			end
 		end
 	elseif style == EasingStyle.Quint then
 		if direction == EasingDirection.In then
-			return alpha^5
+			return alpha ^ 5
 		elseif direction == EasingDirection.Out then
-			return 1 - (1 - alpha)^5
+			return 1 - (1 - alpha) ^ 5
 		elseif direction == EasingDirection.InOut then
 			if alpha < 0.5 then
-				return 16 * alpha^5
+				return 16 * alpha ^ 5
 			else
-				return 1 - (-2 * alpha + 2)^5 / 2
+				return 1 - (-2 * alpha + 2) ^ 5 / 2
 			end
 		end
 	elseif style == EasingStyle.Bounce then
@@ -161,15 +161,15 @@ local function getEasingValue(alpha: number, style: EasingStyle, direction: Easi
 		end
 		local c4 = (2 * PI) / 3
 		if direction == EasingDirection.In then
-			return -2^(10 * alpha - 10) * sin((alpha * 10 - 10.75) * c4)
+			return -2 ^ (10 * alpha - 10) * sin((alpha * 10 - 10.75) * c4)
 		elseif direction == EasingDirection.Out then
-			return 2^(-10 * alpha) * sin((alpha * 10 - 0.75) * c4) + 1
+			return 2 ^ (-10 * alpha) * sin((alpha * 10 - 0.75) * c4) + 1
 		elseif direction == EasingDirection.InOut then
 			local c5 = (2 * PI) / 4.5
 			if alpha < 0.5 then
-				return -(2^(20 * alpha - 10) * sin((20 * alpha - 11.125) * c5)) / 2
+				return -(2 ^ (20 * alpha - 10) * sin((20 * alpha - 11.125) * c5)) / 2
 			else
-				return (2^(-20 * alpha + 10) * sin((20 * alpha - 11.125) * c5)) / 2 + 1
+				return (2 ^ (-20 * alpha + 10) * sin((20 * alpha - 11.125) * c5)) / 2 + 1
 			end
 		end
 	elseif style == EasingStyle.Exponential then
@@ -177,38 +177,38 @@ local function getEasingValue(alpha: number, style: EasingStyle, direction: Easi
 			return alpha
 		end
 		if direction == EasingDirection.In then
-			return 2^(10 * alpha - 10)
+			return 2 ^ (10 * alpha - 10)
 		elseif direction == EasingDirection.Out then
-			return 1 - 2^(-10 * alpha)
+			return 1 - 2 ^ (-10 * alpha)
 		elseif direction == EasingDirection.InOut then
 			if alpha < 0.5 then
-				return 2^(20 * alpha - 10) / 2
+				return 2 ^ (20 * alpha - 10) / 2
 			else
-				return (2 - 2^(-20 * alpha + 10)) / 2
+				return (2 - 2 ^ (-20 * alpha + 10)) / 2
 			end
 		end
 	elseif style == EasingStyle.Circular then
 		if direction == EasingDirection.In then
-			return 1 - sqrt(1 - alpha^2)
+			return 1 - sqrt(1 - alpha ^ 2)
 		elseif direction == EasingDirection.Out then
-			return sqrt(1 - (alpha - 1)^2)
+			return sqrt(1 - (alpha - 1) ^ 2)
 		elseif direction == EasingDirection.InOut then
 			if alpha < 0.5 then
-				return (1 - sqrt(1 - (2 * alpha)^2)) / 2
+				return (1 - sqrt(1 - (2 * alpha) ^ 2)) / 2
 			else
-				return (sqrt(1 - (-2 * alpha + 2)^2) + 1) / 2
+				return (sqrt(1 - (-2 * alpha + 2) ^ 2) + 1) / 2
 			end
 		end
 	elseif style == EasingStyle.Cubic then
 		if direction == EasingDirection.In then
-			return alpha^3
+			return alpha ^ 3
 		elseif direction == EasingDirection.Out then
-			return 1 - (1 - alpha)^3
+			return 1 - (1 - alpha) ^ 3
 		elseif direction == EasingDirection.InOut then
 			if alpha < 0.5 then
-				return 4 * alpha^3
+				return 4 * alpha ^ 3
 			else
-				return 1 - (-2 * alpha + 2)^3 / 2
+				return 1 - (-2 * alpha + 2) ^ 3 / 2
 			end
 		end
 	end
@@ -216,17 +216,19 @@ local function getEasingValue(alpha: number, style: EasingStyle, direction: Easi
 	return alpha
 end
 
-local TweenService = {}
-TweenService.EasingStyle = EasingStyle
-TweenService.EasingDirection = EasingDirection
-TweenService.TweenInfo = TweenInfo
+local TweenMachine = {}
+TweenMachine.EasingStyle = EasingStyle
+TweenMachine.EasingDirection = EasingDirection
+TweenMachine.TweenInfo = TweenInfo
 
-function TweenService:GetValue(alpha: number, style: EasingStyle, direction: EasingDirection): number
-	if game then
-		return (game:GetService("TweenService") :: any):GetValue(alpha, style, direction)
+local TweenService = if game then game:GetService("TweenService") else nil
+
+function TweenMachine:GetValue(alpha: number, style: EasingStyle, direction: EasingDirection): number
+	if TweenService then
+		return TweenService:GetValue(alpha, style :: any, direction :: any)
 	else
 		return getEasingValue(alpha, style, direction)
 	end
 end
 
-return TweenService
+return TweenMachine

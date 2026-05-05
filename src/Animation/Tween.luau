@@ -26,27 +26,19 @@ local Stopwatch = require("./Stopwatch")
 local lerpType = require("./lerpType")
 local getTweenRatio = require("./getTweenRatio")
 local getTweenDuration = require("./getTweenDuration")
-local TweenService = require("./TweenService")
+local TweenMachine = require("./TweenMachine")
 -- Utility
 local nicknames = require("../Utility/nicknames")
-
-local EasingStyle = TweenService.EasingStyle
-local EasingDirection = TweenService.EasingDirection
-local TweenInfo = TweenService.TweenInfo
-
-export type EasingStyle = TweenService.EasingStyle
-export type EasingDirection = TweenService.EasingDirection
-export type TweenInfo = TweenService.TweenInfo
 
 export type Self<T> = Types.Tween<T> & {
 	_activeDuration: number,
 	_activeElapsed: number,
 	_activeFrom: T,
 	_activeTo: T,
-	_activeTweenInfo: TweenInfo,
+	_activeTweenInfo: TweenMachine.TweenInfo,
 	_goal: Types.UsedAs<T>,
 	_stopwatch: Stopwatch.Stopwatch?,
-	_tweenInfo: Types.UsedAs<TweenInfo>,
+	_tweenInfo: Types.UsedAs<TweenMachine.TweenInfo>,
 }
 
 local class = {}
@@ -59,7 +51,7 @@ local METATABLE = table.freeze({ __index = class })
 local function Tween<T>(
 	scope: Types.Scope<unknown>,
 	goal: Types.UsedAs<T>,
-	tweenInfo: Types.UsedAs<TweenInfo>?
+	tweenInfo: Types.UsedAs<TweenMachine.TweenInfo>?
 ): Types.Tween<T>
 	local createdAt = os.clock()
 
@@ -84,7 +76,7 @@ local function Tween<T>(
 		_EXTREMELY_DANGEROUS_usedAsValue = peek(goal),
 		_goal = goal,
 		_stopwatch = stopwatch,
-		_tweenInfo = tweenInfo or TweenInfo.new(),
+		_tweenInfo = tweenInfo or TweenMachine.TweenInfo.new(),
 	}, METATABLE) :: any
 	local destroy = function()
 		self.scope = nil
@@ -140,7 +132,7 @@ function class._evaluate<T>(self: Self<T>): boolean
 		return false
 	end
 	local stopwatch = self._stopwatch :: Stopwatch.Stopwatch
-	local tweenInfo = peek(self._tweenInfo) :: TweenInfo
+	local tweenInfo = peek(self._tweenInfo) :: TweenMachine.TweenInfo
 	-- Restart animation when the goal changes, or if the tween info changes
 	-- partway through another animation.
 	if

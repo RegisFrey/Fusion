@@ -76,9 +76,9 @@ local FusionTable = {
 	-- Animation
 	Tween = require("./Animation/Tween"),
 	Spring = require("./Animation/Spring"),
-	TweenInfo = require("./Animation/TweenService").TweenInfo,
-	EasingStyle = require("./Animation/TweenService").EasingStyle,
-	EasingDirection = require("./Animation/TweenService").EasingDirection,
+
+	-- e.g. Fusion.TweenMachine.Info, Fusion.TweenMachine.EasingStyle
+	TweenMachine = require("./Animation/TweenMachine"),
 }
 
 -- Mixin platform-specific special keys and behaviors

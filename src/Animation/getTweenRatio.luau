@@ -8,13 +8,10 @@ local task = nil -- Disable usage of Roblox's task scheduler
 	tween between two values over time.
 ]]
 
-local TweenService = require("./TweenService")
-type TweenInfo = TweenService.TweenInfo
+local TweenMachine = require("./TweenMachine")
+type TweenInfo = TweenMachine.TweenInfo
 
-local function getTweenRatio(
-	tweenInfo: TweenInfo,
-	currentTime: number
-): number
+local function getTweenRatio(tweenInfo: TweenInfo, currentTime: number): number
 	local delay = tweenInfo.DelayTime
 	local duration = tweenInfo.Time
 	local reverses = tweenInfo.Reverses
@@ -41,7 +38,7 @@ local function getTweenRatio(
 	if tweenProgress > 1 then
 		tweenProgress = 2 - tweenProgress
 	end
-	local ratio = TweenService:GetValue(tweenProgress, easeStyle, easeDirection)
+	local ratio = TweenMachine:GetValue(tweenProgress, easeStyle, easeDirection)
 	return ratio
 end
 
