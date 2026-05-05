@@ -63,4 +63,4 @@ export function prepareBridge () {
     }
 }
 
-export default bridge
+export default prepareBridge
