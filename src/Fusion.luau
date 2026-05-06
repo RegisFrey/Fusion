@@ -27,10 +27,10 @@ export type Spring<T> = Types.Spring<T>
 export type StateObject<T> = Types.StateObject<T>
 export type Task = Types.Task
 export type Tween<T> = Types.Tween<T>
+export type TweenMachine = Types.TweenMachine
 export type Use = Types.Use
 export type Value<T, S = T> = Types.Value<T, S>
 export type Version = Types.Version
-export type TweenInfo = Types.TweenInfo
 
 if game then
 	local RobloxExternal = require("./Externals/Roblox/RobloxExternal")

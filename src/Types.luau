@@ -36,11 +36,17 @@ export type Animatable =
 	Vector3 |
 	Vector3int16
  
+--  Values in TweenMachine ported from Roblox's EasingStyle enum.
+type EasingStyle = number
+
+--  Values in TweenMachine ported from Roblox's EasingDirection enum.
+type EasingDirection = number
+
 -- Information about how a tween should behave.
 export type TweenInfo = {
 	Time: number,
-	EasingStyle: number,
-	EasingDirection: number,
+	EasingStyle: EasingStyle,
+	EasingDirection: EasingDirection,
 	RepeatCount: number,
 	Reverses: boolean,
 	DelayTime: number,
@@ -255,6 +261,39 @@ export type Safe = <Success, Fail>(
 	}
 ) -> Success | Fail
 
+-- Provides easing functions and TweenInfo creation.
+export type TweenMachine = {
+	EasingStyle: {
+		Linear: EasingStyle,
+		Quad: EasingStyle,
+		Cubic: EasingStyle,
+		Quart: EasingStyle,
+		Quint: EasingStyle,
+		Sine: EasingStyle,
+		Back: EasingStyle,
+		Bounce: EasingStyle,
+		Elastic: EasingStyle,
+		Exponential: EasingStyle,
+		Circular: EasingStyle,
+	},
+	EasingDirection: {
+		In: EasingDirection,
+		Out: EasingDirection,
+		InOut: EasingDirection,
+	},
+	TweenInfo: {
+		new: (
+			time: number?,
+			easingStyle: EasingStyle?,
+			easingDirection: EasingDirection?,
+			repeatCount: number?,
+			reverses: boolean?,
+			delayTime: number?
+		) -> TweenInfo,
+	},
+	GetValue: (self: TweenMachine, alpha: number, style: EasingStyle, direction: EasingDirection) -> number,
+}
+
 export type Fusion = {
 	version: Version,
 	Contextual: ContextualConstructor,
@@ -276,6 +315,7 @@ export type Fusion = {
 
 	Tween: TweenConstructor,
 	Spring: SpringConstructor,
+	TweenMachine: TweenMachine,
 
 	New: NewConstructor,
 	Hydrate: HydrateConstructor,

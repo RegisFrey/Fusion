@@ -31,8 +31,8 @@ local EasingDirection = {
 
 local Types = require("../Types")
 
-export type EasingStyle = number
-export type EasingDirection = number
+export type EasingStyle = Types.EasingStyle
+export type EasingDirection = Types.EasingDirection
 
 export type TweenInfo = Types.TweenInfo
 
