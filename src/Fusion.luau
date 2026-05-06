@@ -35,14 +35,6 @@ export type Version = Types.Version
 if game then
 	local RobloxExternal = require("./Externals/Roblox/RobloxExternal")
 	External.setExternalProvider(RobloxExternal)
-else
-	local WebExternal = require("./Externals/Web/WebExternal")
-	External.setExternalProvider(WebExternal)
-	-- For now web is our only other target
-	-- so we can condition on game.
-	-- but it'd be good to have a better way of choosing
-	-- or providing an External
-	-- perhaps we just make user need to call this?
 end
 
 local FusionTable = {
