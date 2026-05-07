@@ -11,6 +11,7 @@ local task = nil -- Disable usage of Roblox's task scheduler
 
 local Types = require("../Types")
 -- Graph
+local External = require("../Externals/External")
 local change = require("../Graph/change")
 -- Utility
 local isSimilar = require("../Utility/isSimilar")
@@ -35,7 +36,7 @@ local function Value<T>(
 		{
 			createdAt = createdAt,
 			dependentSet = {},
-			lastChange = os.clock(),
+			lastChange = External.getNextVersion(),
 			scope = scope,
 			validity = "valid",
 			_EXTREMELY_DANGEROUS_usedAsValue = initialValue

@@ -43,7 +43,7 @@ local function evaluate(
 			targetMeaningfullyChanged = target:_evaluate() or firstEvaluation
 		end
 		if targetMeaningfullyChanged then
-			target.lastChange = os.clock()
+			target.lastChange = External.getNextVersion()
 		end
 		target.validity = "valid"
 		return targetMeaningfullyChanged

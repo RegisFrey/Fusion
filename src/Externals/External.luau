@@ -22,6 +22,7 @@ External.safetyTimerMultiplier = 1
 local updateStepCallbacks = {}
 local currentProvider: Types.ExternalProvider? = nil
 local lastUpdateStep = 0
+local updateCounter = 0
 
 --[[
 	Swaps to a new provider for external operations.
@@ -139,6 +140,14 @@ end
 ]]
 function External.lastUpdateStep()
 	return lastUpdateStep
+end
+
+--[[
+	Returns a unique, increasing ID for the current change.
+]]
+function External.getNextVersion()
+	updateCounter += 1
+	return updateCounter
 end
 
 --[[
